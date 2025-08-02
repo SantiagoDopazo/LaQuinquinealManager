@@ -1,0 +1,22 @@
+# Binarios de Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Directorio de dependencias (opcional, solo si usas vendor)
+vendor/
+
+# Archivos de entorno
+.env
+.env.*
+
+# Archivos temporales de editores
+*.swp
+*.swo
+.idea/
+.vscode/
+.DS_Store

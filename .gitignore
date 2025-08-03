@@ -7,9 +7,6 @@
 *.test
 *.out
 
-# Directorio de dependencias (opcional, solo si usas vendor)
-vendor/
-
 # Archivos de entorno
 .env
 .env.*

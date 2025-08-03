@@ -2,12 +2,12 @@ package main
 
 import (
     "log"
-    "laquinquenal/config"
     "laquinquenal/server"
+    "laquinquenal/db"
 )
 
 func main() {
-    config.ConnectDatabase()
+    db.ConnectDatabase()
     
     app := server.NewServer()
     if err := app.Start(); err != nil {

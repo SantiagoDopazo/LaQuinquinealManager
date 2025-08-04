@@ -4,7 +4,6 @@ import (
 	"errors"
 	"laquinquenal/models"
 	"laquinquenal/repositories"
-	"time"
 )
 
 type OrderService struct {
@@ -27,10 +26,6 @@ func (service *OrderService) CreateOrder(order *models.Order) error {
 	if order.Status == "" {
 		order.Status = "pending"
 	}
-
-	now := time.Now()
-	order.CreatedAt = now
-	order.UpdatedAt = now
 
 	if err := service.orderRepo.CreateOrder(order); err != nil {
 		return errors.New("failed to create order: " + err.Error())

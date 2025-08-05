@@ -33,3 +33,7 @@ func (service *OrderService) CreateOrder(order *models.Order) error {
 
 	return nil
 }
+
+func (service *OrderService) GetOrderByID(id uint) (*models.Order, error) {
+	return service.orderRepo.GetOrderByID(id)
+}

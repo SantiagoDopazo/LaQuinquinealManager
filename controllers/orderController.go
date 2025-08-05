@@ -72,3 +72,18 @@ func (ctrl *OrderController) GetOrderByID(c *gin.Context) {
 		"data": order,
 	})
 }
+
+func (ctrl *OrderController) GetAllOrders(c *gin.Context) {
+	orders, err := ctrl.orderService.GetAllOrders()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to retrieve orders: " + err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data":  orders,
+		"count": len(orders),
+	})
+}

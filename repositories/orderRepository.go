@@ -23,3 +23,12 @@ func (repo *OrderRepository) GetOrderByID(id uint) (*models.Order, error) {
 	}
 	return &order, nil
 }
+
+func (repo *OrderRepository) GetAllOrders() ([]models.Order, error) {
+	var orders []models.Order
+	err := db.DB.Find(&orders).Error
+	if err != nil {
+		return nil, err
+	}
+	return orders, nil
+}

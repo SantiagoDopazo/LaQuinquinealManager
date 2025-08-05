@@ -37,3 +37,7 @@ func (service *OrderService) CreateOrder(order *models.Order) error {
 func (service *OrderService) GetOrderByID(id uint) (*models.Order, error) {
 	return service.orderRepo.GetOrderByID(id)
 }
+
+func (service *OrderService) GetAllOrders() ([]models.Order, error) {
+	return service.orderRepo.GetAllOrders()
+}

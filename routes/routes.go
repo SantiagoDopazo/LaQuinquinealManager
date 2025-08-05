@@ -10,6 +10,7 @@ func SetupRoutes(router *gin.Engine, healthController *controllers.HealthCheckCo
 	router.GET("/health_check", healthController.Check)
 
 	// Order routes
+	router.GET("/orders", orderController.GetAllOrders)
 	router.POST("/orders", orderController.CreateOrder)
 	router.GET("/orders/:id", orderController.GetOrderByID)
 }

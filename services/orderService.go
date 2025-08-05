@@ -41,3 +41,43 @@ func (service *OrderService) GetOrderByID(id uint) (*models.Order, error) {
 func (service *OrderService) GetAllOrders() ([]models.Order, error) {
 	return service.orderRepo.GetAllOrders()
 }
+
+func (service *OrderService) UpdateOrder(id uint, updatedOrder *models.Order) (*models.Order, error) {
+	existingOrder, err := service.orderRepo.GetOrderByID(id)
+	if err != nil {
+		return nil, errors.New("order not found")
+	}
+
+	if updatedOrder.OrderNumber == "" || updatedOrder.ClientName == "" {
+		return nil, errors.New("order number and client name are required")
+	}
+
+	updatedOrder.ID = existingOrder.ID
+
+	updatedOrder.TotalPrice = updatedOrder.UnitPrice * float64(updatedOrder.Quantity)
+
+	if updatedOrder.Status == "" {
+		updatedOrder.Status = existingOrder.Status
+	}
+
+	updatedOrder.CreatedAt = existingOrder.CreatedAt
+
+	if err := service.orderRepo.UpdateOrder(updatedOrder); err != nil {
+		return nil, errors.New("failed to update order: " + err.Error())
+	}
+
+	return updatedOrder, nil
+}
+
+func (service *OrderService) DeleteOrder(id uint) error {
+	_, err := service.orderRepo.GetOrderByID(id)
+	if err != nil {
+		return errors.New("order not found")
+	}
+
+	if err := service.orderRepo.DeleteOrder(id); err != nil {
+		return errors.New("failed to delete order: " + err.Error())
+	}
+
+	return nil
+}

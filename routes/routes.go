@@ -13,4 +13,6 @@ func SetupRoutes(router *gin.Engine, healthController *controllers.HealthCheckCo
 	router.GET("/orders", orderController.GetAllOrders)
 	router.POST("/orders", orderController.CreateOrder)
 	router.GET("/orders/:id", orderController.GetOrderByID)
+	router.PUT("/orders/:id", orderController.UpdateOrder)
+	router.DELETE("/orders/:id", orderController.DeleteOrder)
 }

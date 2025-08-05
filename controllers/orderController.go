@@ -87,3 +87,70 @@ func (ctrl *OrderController) GetAllOrders(c *gin.Context) {
 		"count": len(orders),
 	})
 }
+
+func (ctrl *OrderController) UpdateOrder(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid order ID format",
+		})
+		return
+	}
+
+	var updatedOrder models.Order
+	if err := c.ShouldBindJSON(&updatedOrder); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid JSON format: " + err.Error(),
+		})
+		return
+	}
+
+	order, err := ctrl.orderService.UpdateOrder(uint(id), &updatedOrder)
+	if err != nil {
+		if err.Error() == "order not found" {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": "Order not found",
+			})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Order updated successfully",
+		"data":    order,
+	})
+}
+
+func (ctrl *OrderController) DeleteOrder(c *gin.Context) {
+	idParam := c.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid order ID format",
+		})
+		return
+	}
+
+	err = ctrl.orderService.DeleteOrder(uint(id))
+	if err != nil {
+		if err.Error() == "order not found" {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": "Order not found",
+			})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Order deleted successfully",
+	})
+}

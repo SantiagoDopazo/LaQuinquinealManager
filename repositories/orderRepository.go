@@ -32,3 +32,11 @@ func (repo *OrderRepository) GetAllOrders() ([]models.Order, error) {
 	}
 	return orders, nil
 }
+
+func (repo *OrderRepository) UpdateOrder(order *models.Order) error {
+	return db.DB.Save(order).Error
+}
+
+func (repo *OrderRepository) DeleteOrder(id uint) error {
+	return db.DB.Delete(&models.Order{}, id).Error
+}

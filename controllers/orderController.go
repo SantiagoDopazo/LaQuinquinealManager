@@ -38,10 +38,15 @@ func (ctrl *OrderController) CreateOrder(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "Order created successfully",
-		"data":    order,
-	})
+	createdOrder, err := ctrl.orderService.GetOrderByID(order.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Order created but failed to load complete data: " + err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, createdOrder)
 }
 
 func (ctrl *OrderController) GetOrderByID(c *gin.Context) {

@@ -13,6 +13,7 @@ type Server struct {
 
 	healthController *controllers.HealthCheckController
 	orderController  *controllers.OrderController
+	clientController *controllers.ClientController
 
 	port string
 }
@@ -31,12 +32,13 @@ func NewServer() *Server {
 func (server *Server) initializeControllers() {
 	server.healthController = controllers.NewHealthCheckController()
 	server.orderController = controllers.NewOrderController()
+	server.clientController = controllers.NewClientController()
 }
 
 func (server *Server) initializeRoutes() {
 	server.router = gin.Default()
 
-	routes.SetupRoutes(server.router, server.healthController, server.orderController)
+	routes.SetupRoutes(server.router, server.healthController, server.orderController, server.clientController)
 }
 
 func (server *Server) Start() error {

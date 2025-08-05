@@ -7,18 +7,29 @@ import (
 )
 
 type OrderService struct {
-	orderRepo *repositories.OrderRepository
+	orderRepo  *repositories.OrderRepository
+	clientRepo *repositories.ClientRepository
 }
 
 func NewOrderService() *OrderService {
 	return &OrderService{
-		orderRepo: repositories.NewOrderRepository(),
+		orderRepo:  repositories.NewOrderRepository(),
+		clientRepo: repositories.NewClientRepository(),
 	}
 }
 
 func (service *OrderService) CreateOrder(order *models.Order) error {
-	if order.OrderNumber == "" || order.ClientName == "" {
-		return errors.New("order number and client name are required")
+	if order.OrderNumber == "" {
+		return errors.New("order number is required")
+	}
+
+	if order.ClientID == 0 {
+		return errors.New("client ID is required")
+	}
+
+	_, err := service.clientRepo.GetClientByID(order.ClientID)
+	if err != nil {
+		return errors.New("client not found")
 	}
 
 	order.TotalPrice = order.UnitPrice * float64(order.Quantity)
@@ -48,8 +59,17 @@ func (service *OrderService) UpdateOrder(id uint, updatedOrder *models.Order) (*
 		return nil, errors.New("order not found")
 	}
 
-	if updatedOrder.OrderNumber == "" || updatedOrder.ClientName == "" {
-		return nil, errors.New("order number and client name are required")
+	if updatedOrder.OrderNumber == "" {
+		return nil, errors.New("order number is required")
+	}
+
+	if updatedOrder.ClientID == 0 {
+		return nil, errors.New("client ID is required")
+	}
+
+	_, err = service.clientRepo.GetClientByID(updatedOrder.ClientID)
+	if err != nil {
+		return nil, errors.New("client not found")
 	}
 
 	updatedOrder.ID = existingOrder.ID

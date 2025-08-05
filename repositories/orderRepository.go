@@ -17,7 +17,7 @@ func (repo *OrderRepository) CreateOrder(order *models.Order) error {
 
 func (repo *OrderRepository) GetOrderByID(id uint) (*models.Order, error) {
 	var order models.Order
-	err := db.DB.First(&order, id).Error
+	err := db.DB.Preload("Client").First(&order, id).Error
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +26,7 @@ func (repo *OrderRepository) GetOrderByID(id uint) (*models.Order, error) {
 
 func (repo *OrderRepository) GetAllOrders() ([]models.Order, error) {
 	var orders []models.Order
-	err := db.DB.Find(&orders).Error
+	err := db.DB.Preload("Client").Find(&orders).Error
 	if err != nil {
 		return nil, err
 	}

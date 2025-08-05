@@ -1,16 +1,16 @@
 package main
 
 import (
-    "log"
-    "laquinquenal/server"
-    "laquinquenal/db"
+	"laquinquenal/db"
+	"laquinquenal/server"
+	"log"
 )
 
 func main() {
-    db.ConnectDatabase()
-    
-    app := server.NewServer()
-    if err := app.Start(); err != nil {
-        log.Fatal("Failed to start server:", err)
-    }
+	db.ConnectDatabase()
+
+	app := server.NewServer()
+	if err := app.Start(); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }
